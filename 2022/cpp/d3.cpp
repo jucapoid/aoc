@@ -5,7 +5,7 @@
 std::vector<std::vector<std::string>> readFile() {
 	std::fstream input;
 	std::string line;
-	input.open("../inputs/input-d3.txt");
+	input.open("/home/jucapoid/aoc/2022/inputs/input-d3.txt");
     std::vector<std::vector<std::string>> rucksacks;
 
 	if (input.is_open()) {
