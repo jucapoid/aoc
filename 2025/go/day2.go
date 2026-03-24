@@ -46,8 +46,9 @@ func main() {
 			}
 		}
 	}
-	fmt.Println(sumPart1)
-	fmt.Println(sumPart2)
+
+	fmt.Printf("Part One: %d\n", sumPart1)
+	fmt.Printf("Part Two: %d\n", sumPart2)
 }
 
 func isInvalidPart1(id int64) bool {
