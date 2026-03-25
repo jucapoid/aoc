@@ -25,33 +25,34 @@ func main() {
 	}
 
 	grid = replaceAccessible(grid)
-	part1 := countReplaced(grid)
+	part1, grid := countReplaced(grid)
 
 	part2 := part1
 	temp := 0
 	for {
-		if (part2 == temp) {
+		grid = replaceAccessible(grid)
+		temp, grid = countReplaced(grid)
+		if (temp == 0) {
 			break
 		}
-		part2 = temp
-		grid = replaceAccessible(grid)
-		temp = countReplaced(grid)
+		part2 += temp
 	}
 
 	fmt.Printf("Part One: %d\n", part1)
 	fmt.Printf("Part Two: %d\n", part2)
 }
 
-func countReplaced(grid [][]string) int {
+func countReplaced(grid [][]string) (int, [][]string) {
 	sum := 0
 	for line := 0; line < len(grid); line++ {
 		for row := 0; row < len(grid[line]); row++ {
 			if (grid[line][row] == "x") {
+				grid[line][row] = "."
 				sum++
 			}
 		}
 	}
-	return sum
+	return sum, grid
 }
 
 func replaceAccessible(grid [][]string) [][]string {
@@ -67,30 +68,85 @@ func replaceAccessible(grid [][]string) [][]string {
 
 func canBeAccessed(line int, row int, grid [][]string) bool {
 	adjacent := 0
-	if (line > 0 && string(grid[line - 1][row]) == "@") {
+	if (north(line, row, grid)) {
 		adjacent++
 	}
-	if (line < len(grid) - 1 && string(grid[line + 1][row]) == "@") {
+	if (south(line, row, grid)) {
 		adjacent++
 	}
-	if (row > 0 && string(grid[line][row - 1]) == "@") {
+	if (west(line, row, grid)) {
 		adjacent++
 	}
-	if (row < len(grid[line]) - 1 && string(grid[line][row + 1]) == "@") {
+	if (east(line, row, grid)) {
 		adjacent++
 	}
-	if (line > 0 && row > 0 && string(grid[line - 1][row - 1]) == "@") {
+	if (northwest(line, row, grid)) {
 		adjacent++
 	}
-	if (line > 0 && row < len(grid[line]) - 1 && string(grid[line - 1][row + 1]) == "@") {
+	if (northeast(line, row, grid)) {
 		adjacent++
 	}
-	if (line < len(grid) - 1 && row > 0 && string(grid[line + 1][row - 1]) == "@") {
+	if (southwest(line, row, grid)) {
 		adjacent++
 	}
-	if (line < len(grid) - 1 && row < len(grid[line]) - 1 && string(grid[line + 1][row + 1]) == "@") {
+	if (southeast(line, row, grid)) {
 		adjacent++
 	}
 	return adjacent < 4
 }
 
+func north(line int, row int, grid [][]string) bool {
+	if (line > 0) {
+		return string(grid[line - 1][row]) != "."
+	}
+	return false
+}
+
+func south(line int, row int, grid [][]string) bool {
+	if (line < len(grid) - 1) {
+		return string(grid[line + 1][row]) != "."
+	}
+	return false
+}
+
+func west(line int, row int, grid [][]string) bool {
+	if (row > 0) {
+		return string(grid[line][row - 1]) != "."
+	}
+	return false
+}
+
+func east(line int, row int, grid [][]string) bool {
+	if (row < len(grid[line]) - 1) {
+		return string(grid[line][row + 1]) != "."
+	}
+	return false
+}
+
+func northwest(line int, row int, grid [][]string) bool {
+	if (line > 0 && row > 0) {
+		return string(grid[line - 1][row - 1]) != "."
+	}
+	return false
+}
+
+func northeast(line int, row int, grid [][]string) bool {
+	if (line > 0 && row < len(grid[line]) - 1) {
+		return string(grid[line - 1][row + 1]) != "."
+	}
+	return false
+}
+
+func southwest(line int, row int, grid [][]string) bool {
+	if (line < len(grid) - 1 && row > 0) {
+		return string(grid[line + 1][row - 1]) != "."
+	}
+	return false
+}
+
+func southeast(line int, row int, grid [][]string) bool {
+	if (line < len(grid) - 1 && row < len(grid[line]) - 1) {
+		return string(grid[line + 1][row + 1]) != "."
+	}
+	return false
+}
